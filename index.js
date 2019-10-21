@@ -27,3 +27,5 @@ bot.command('date', (ctx)=>{
 
 
 bot.launch();
+
+console.log(process.env.BOT_TOKEN);

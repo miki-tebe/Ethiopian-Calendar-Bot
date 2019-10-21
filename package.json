@@ -1,0 +1,21 @@
+{
+  "name": "ethio-calender-bot",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.16.4",
+    "telegraf": "^3.32.0",
+    "ethiopic-js": "^1.2.5"
+  },
+  "engines": {
+    "node": "8.x"
+  },
+  "license": "MIT",
+  "keywords": [
+    "node"
+  ]
+}

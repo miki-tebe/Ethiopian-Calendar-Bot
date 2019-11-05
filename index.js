@@ -19,7 +19,7 @@ bot.help((ctx) => ctx.reply('Help message'));
 bot.command('date', (ctx) => {
     let gDate = new Date();
     let eDate = ethiopic.toEthiopic(gDate.getFullYear(), gDate.getMonth() + 1, gDate.getDate());
-    return ctx.reply("In Ethiopian Calender to day is: " + eDate[2] + "/" + eDate[1] + "/" + eDate[0]);
+    return ctx.reply("In Ethiopian Calender today is: " + eDate[2] + "/" + eDate[1] + "/" + eDate[0]);
 });
 
 const PRODUCTION = true;

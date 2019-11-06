@@ -7,12 +7,12 @@ let ethiopic = require('ethiopic-js');
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
 
-const welcomeMessage = "Hello";
+const welcomeMessage = "Hello, you can use /date to get today's date in Ethiopian Calender";
 
 
 bot.start((ctx) => {
     console.log("aa");
-    return ctx.reply('Hello ');
+    return ctx.reply(welcomeMessage);
 });
 bot.help((ctx) => ctx.reply('Help message'));
 

@@ -1,25 +1,43 @@
 const Telegraf = require('telegraf');
-const Extra = require('telegraf/extra');
-const {reply} = Telegraf;
+const Markup = require('telegraf/markup');
+const session = require('telegraf/session');
+const Stage = require('telegraf/stage');
+const WizardScene = require('telegraf/scenes/wizard');
 
 let ethiopic = require('ethiopic-js');
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
 
-const welcomeMessage = "Hello, you can use /date to get today's date in Ethiopian Calender";
+const welcomeMessage = "Hello, you can use /date to get today's date in Ethiopian Calender or use Get Date Button";
 
 
 bot.start((ctx) => {
-    console.log("aa");
-    return ctx.reply(welcomeMessage);
+    ctx.reply(welcomeMessage,
+        Markup.inlineKeyboard([
+            Markup.callbackButton("Get Date", "GET_DATE")
+        ]).extra());
 });
-bot.help((ctx) => ctx.reply('Help message'));
+
+const getDate = new WizardScene("get_date",
+    (ctx) => {
+        let gDate = new Date();
+        let eDate = ethiopic.toEthiopic(gDate.getFullYear(), gDate.getMonth() + 1, gDate.getDate());
+        ctx.reply(`In Ethiopian Calender today is:  ${eDate[2]}/${eDate[1]}/${eDate[0]} `,
+            Markup.inlineKeyboard([
+                Markup.callbackButton("Get Date", "GET_DATE")
+            ]).extra());
+        return ctx.scene.leave();
+    }
+);
+
+const stage = new Stage([getDate], { default: "get_date" });
+
+
+bot.help((ctx) => ctx.reply("You can use /date to get today's date in Ethiopian Calender or use Get Date Button"));
 
 bot.command('date', (ctx) => {
-    let gDate = new Date();
-    let eDate = ethiopic.toEthiopic(gDate.getFullYear(), gDate.getMonth() + 1, gDate.getDate());
-    return ctx.reply("In Ethiopian Calender today is: " + eDate[2] + "/" + eDate[1] + "/" + eDate[0]);
+    getDate();
 });
 
 const PRODUCTION = true;

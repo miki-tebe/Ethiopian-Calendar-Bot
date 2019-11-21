@@ -19,14 +19,18 @@ bot.start((ctx) => {
         ]).extra());
 });
 
-const getDate = new WizardScene("get_date",
+const getDate = (ctx) => {
+    let gDate = new Date();
+    let eDate = ethiopic.toEthiopic(gDate.getFullYear(), gDate.getMonth() + 1, gDate.getDate());
+    ctx.reply(`In Ethiopian Calender today is:  ${eDate[2]}/${eDate[1]}/${eDate[0]} `,
+        Markup.inlineKeyboard([
+            Markup.callbackButton("Get Date", "GET_DATE")
+        ]).extra());
+};
+
+const getDateWizard = new WizardScene("get_date",
     (ctx) => {
-        let gDate = new Date();
-        let eDate = ethiopic.toEthiopic(gDate.getFullYear(), gDate.getMonth() + 1, gDate.getDate());
-        ctx.reply(`In Ethiopian Calender today is:  ${eDate[2]}/${eDate[1]}/${eDate[0]} `,
-            Markup.inlineKeyboard([
-                Markup.callbackButton("Get Date", "GET_DATE")
-            ]).extra());
+        getDate(ctx);
         return ctx.scene.leave();
     }
 );
@@ -37,7 +41,7 @@ const stage = new Stage([getDate], { default: "get_date" });
 bot.help((ctx) => ctx.reply("You can use /date to get today's date in Ethiopian Calender or use Get Date Button"));
 
 bot.command('date', (ctx) => {
-    getDate();
+    getDate(ctx);
 });
 
 const PRODUCTION = true;

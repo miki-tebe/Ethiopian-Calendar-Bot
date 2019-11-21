@@ -35,7 +35,7 @@ const getDateWizard = new WizardScene("get_date",
     }
 );
 
-const stage = new Stage([getDate], { default: "get_date" });
+const stage = new Stage([getDateWizard], { default: "get_date" });
 
 
 bot.help((ctx) => ctx.reply("You can use /date to get today's date in Ethiopian Calender or use Get Date Button"));

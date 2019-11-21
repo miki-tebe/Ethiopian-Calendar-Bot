@@ -27,7 +27,6 @@ const getDateWizard = new WizardScene("get_date",
         Markup.inlineKeyboard([
             Markup.callbackButton("Get Date", "GET_DATE")
         ]).extra());
-        return ctx.scene.leave();
     }
 );
 

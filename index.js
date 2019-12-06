@@ -44,6 +44,9 @@ bot.command('date', (ctx) => {
         ]).extra());
 });
 
+bot.use(session());
+bot.use(stage.middleware());
+
 const PRODUCTION = true;
 
 if (PRODUCTION) {

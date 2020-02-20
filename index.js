@@ -8,46 +8,54 @@ let ethiopic = require('ethiopic-js');
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
-
-const welcomeMessage = "Hello, you can use /date to get today's date in Ethiopian Calender or use Get Date Button";
-
-
 bot.start((ctx) => {
+    const welcomeMessage = "Hello, you can use /date to get today's date in Ethiopian Calender or use Get Date Button";
     ctx.reply(welcomeMessage,
         Markup.inlineKeyboard([
             Markup.callbackButton("Get Date", "GET_DATE")
         ]).extra());
 });
 
+bot.help((ctx) => ctx.reply("You can use /date to get today's date in Ethiopian Calender or use Get Date Button"));
+
+function getdate() {
+    // gregoraian date
+    let gDate = new Date();
+    // ethiopian date
+    return ethiopic.toEthiopic(gDate.getFullYear(), gDate.getMonth() + 1, gDate.getDate());
+}
+
 const getDateWizard = new WizardScene("get_date",
     (ctx) => {
-        let gDate = new Date();
-        let eDate = ethiopic.toEthiopic(gDate.getFullYear(), gDate.getMonth() + 1, gDate.getDate());
+        let eDate = getdate();
         ctx.reply(`In Ethiopian Calender today is:  ${eDate[2]}/${eDate[1]}/${eDate[0]} `,
-        Markup.inlineKeyboard([
-            Markup.callbackButton("Get Date", "GET_DATE")
-        ]).extra());
+            Markup.inlineKeyboard([
+                Markup.callbackButton("Get Date", "GET_DATE")
+            ]).extra());
+        ctx.answerCbQuery();
     }
 );
 
 const stage = new Stage([getDateWizard], { default: "get_date" });
 
-
-bot.help((ctx) => ctx.reply("You can use /date to get today's date in Ethiopian Calender or use Get Date Button"));
-
 bot.command('date', (ctx) => {
-    let gDate = new Date();
-    let eDate = ethiopic.toEthiopic(gDate.getFullYear(), gDate.getMonth() + 1, gDate.getDate());
+    let eDate = getdate();
     ctx.reply(`In Ethiopian Calender today is:  ${eDate[2]}/${eDate[1]}/${eDate[0]} `,
         Markup.inlineKeyboard([
             Markup.callbackButton("Get Date", "GET_DATE")
         ]).extra());
+    ctx.answerCbQuery();
 });
+
+bot.inlineQuery('date', ctx => {
+    let eDate = getdate();
+    ctx.answerInlineQuery(`In Ethiopian Calender today is:  ${eDate[2]}/${eDate[1]}/${eDate[0]}`);
+});
+
+const PRODUCTION = true;
 
 bot.use(session());
 bot.use(stage.middleware());
-
-const PRODUCTION = true;
 
 if (PRODUCTION) {
     bot.telegram.setWebhook(`https://ethiopian-calender-bot.herokuapp.com/${process.env.BOT_TOKEN}`).then(console.log);
@@ -57,6 +65,3 @@ if (PRODUCTION) {
         .then(() => console.log("Bot Launched"))
         .catch(console.log);
 }
-
-
-

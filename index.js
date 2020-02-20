@@ -47,7 +47,7 @@ bot.command('date', (ctx) => {
     ctx.answerCbQuery();
 });
 
-bot.inlineQuery('date', ctx => {
+bot.inlineQuery('getDate', ctx => {
     let eDate = getdate();
     ctx.answerInlineQuery(`In Ethiopian Calender today is:  ${eDate[2]}/${eDate[1]}/${eDate[0]}`);
 });
